@@ -18,14 +18,18 @@ class DashboardController extends Controller
     }
 
     function allTest() {
-        $exam = Exam::latest()->get();
-        $exam_id = $exam->pluck('id');
+        $exams = Exam::latest()->get();
+        foreach ($exams as $exam) {
+            $exam_id = $exam->pluck('id');
+            $questions = Question::where('exam_id',$exam_id)->get();
+            foreach ($questions as $question) {
+                $question_id = $question->pluck('id');
+                $option = Option::where('question_id', $question_id)->get();
+                # code...
+            }
+        }
+        // dd($question_id);
 
-        $questions = Question::where('exam_id',$exam_id)->get();
-        $question_id = $questions->pluck('id');
-        // dd($exam_id);
-
-        $option = Option::where('question_id', $question_id);
         return view('user.all-test', with([
             'exam' => $exam,
             'exam_id' => $exam,
